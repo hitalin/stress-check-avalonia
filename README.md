@@ -12,8 +12,7 @@ dotnet run
 [デスクトップ版](https://github.com/hitalin/stress-check-avalonia/releases/tag/0.0.1)をご利用ください。Web で使いたいなら[React 版](https://github.com/hitalin/stress-check-react)をご利用ください。
 
 ## Screenshot
-
-![StressCheckAvalonia](https://github.com/hitalin/stress-check-avalonia/assets/8271553/e16c1733-96d6-45fe-8ffb-4ce2b381b39c)
+<img width="1095" height="725" alt="スクリーンショット 2026-02-23 040807" src="https://github.com/user-attachments/assets/c0fae621-5bff-4bec-873f-f758c5c774f6" />
 
 ## Acknowledgements
 

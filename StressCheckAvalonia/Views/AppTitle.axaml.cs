@@ -1,20 +1,19 @@
-using StressCheckAvalonia.ViewModels;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
+using StressCheckAvalonia.ViewModels;
 
-namespace StressCheckAvalonia.Views
+namespace StressCheckAvalonia.Views;
+
+public partial class AppTitle : UserControl
 {
-    public partial class AppTitle : UserControl
+    public AppTitle()
     {
-        public AppTitle()
-        {
-            InitializeComponent();
-            DataContext = StateViewModel.Instance;
-        }
+        InitializeComponent();
+        DataContext = StateViewModel.Instance;
+    }
 
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+    private void InitializeComponent()
+    {
+        AvaloniaXamlLoader.Load(this);
     }
 }

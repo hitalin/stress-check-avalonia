@@ -1,36 +1,35 @@
-using StressCheckAvalonia.ViewModels;
+using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using StressCheckAvalonia.Models;
-using System;
+using StressCheckAvalonia.ViewModels;
 
-namespace StressCheckAvalonia.Views
+namespace StressCheckAvalonia.Views;
+
+public partial class BackButtons : UserControl
 {
-    public partial class BackButtons : UserControl
+    public BackButtons()
     {
-        public BackButtons()
-        {
-            InitializeComponent();
-            DataContext = StateViewModel.Instance;
-        }
+        InitializeComponent();
+        DataContext = StateViewModel.Instance;
+    }
 
-        public void ClickHandler(object sender, RoutedEventArgs args)
+    public void ClickHandler(object sender, RoutedEventArgs args)
+    {
+        if (sender is Button button)
         {
-            if (sender is Button button)
+            if (button.Name == "BackToTitleButton")
             {
-                if (button.Name == "BackToTitleButton")
+                StateViewModel.Instance.CurrentState = State.Input;
+            }
+            else if (button.Name == "BackOneScreenButton")
+            {
+                (StateViewModel.Instance.CurrentState switch
                 {
-                    StateViewModel.Instance.CurrentState = State.Input;
-                }
-                else if (button.Name == "BackOneScreenButton")
-                {
-                    (StateViewModel.Instance.CurrentState switch
-                    {
-                        State.SectionActive => new Action(() => StateViewModel.Instance.HandleSectionActiveState(false)),
-                        State.Aggregated => new Action(() => StateViewModel.Instance.HandleAggregatedState(true)),
-                        _ => throw new InvalidOperationException("Undefined state for BackButtons ClickHandler"),
-                    })();
-                }
+                    State.SectionActive => new Action(() => StateViewModel.Instance.HandleSectionActiveState(false)),
+                    State.Aggregated => new Action(() => StateViewModel.Instance.HandleAggregatedState(true)),
+                    _ => throw new InvalidOperationException("Undefined state for BackButtons ClickHandler"),
+                })();
             }
         }
     }

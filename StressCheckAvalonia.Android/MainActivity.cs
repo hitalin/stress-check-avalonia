@@ -2,7 +2,7 @@
 using Android.Content.PM;
 using Avalonia;
 using Avalonia.Android;
-using Avalonia.ReactiveUI;
+using ReactiveUI.Avalonia;
 
 namespace StressCheckAvalonia.Android;
 
@@ -18,6 +18,6 @@ public class MainActivity : AvaloniaMainActivity<App>
     {
         return base.CustomizeAppBuilder(builder)
             .WithInterFont()
-            .UseReactiveUI();
+            .UseReactiveUI(_ => { });
     }
 }

@@ -12,10 +12,7 @@
       {
         devShell = pkgs.mkShell {
           packages = with pkgs; [
-            dotnet-sdk_8
-            mono
-            msbuild
-            nuget
+            dotnet-sdk_9
           ];
         };
       }

@@ -14,6 +14,21 @@
           packages = with pkgs; [
             dotnet-sdk_9
           ];
+
+          LD_LIBRARY_PATH = pkgs.lib.makeLibraryPath (with pkgs; [
+            fontconfig
+            freetype
+            libx11
+            libxrandr
+            libxcursor
+            libxi
+            libxext
+            libxrender
+            libGL
+            libxkbcommon
+            libICE
+            libSM
+          ]);
         };
       }
     );

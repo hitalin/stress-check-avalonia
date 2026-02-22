@@ -7,7 +7,20 @@
              x:DataType="local:StateViewModel">
 
 	<StackPanel Orientation="Horizontal">
-		<Button Content="タイトルに戻る" Click="BackToTitle_Click" Margin="0, 0, 10, 0" Width="180" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" IsVisible="{Binding IsInputInverted}" />
-		<Button Content="1つ前の画面へ戻る" Click="BackOneScreen_Click" Width="180" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18" IsVisible="{Binding IsInputInverted}" />
+		<Button Content="タイトルに戻る"
+		        Click="BackToTitle_Click"
+		        Classes="secondary"
+		        Margin="0,0,10,0"
+		        MinWidth="140"
+		        HorizontalContentAlignment="Center"
+		        VerticalContentAlignment="Center"
+		        IsVisible="{Binding IsInputInverted}" />
+		<Button Content="1つ前の画面へ戻る"
+		        Click="BackOneScreen_Click"
+		        Classes="secondary"
+		        MinWidth="140"
+		        HorizontalContentAlignment="Center"
+		        VerticalContentAlignment="Center"
+		        IsVisible="{Binding IsInputInverted}" />
 	</StackPanel>
 </UserControl>

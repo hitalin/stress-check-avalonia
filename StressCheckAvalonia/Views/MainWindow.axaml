@@ -5,8 +5,10 @@
         xmlns:local="clr-namespace:StressCheckAvalonia.Views"
         x:Class="StressCheckAvalonia.Views.MainWindow"
         Icon="/Assets/Images/favicon.png"
-		mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="630"
-        Width="1000" Height="630"
+        mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="750"
+        MinWidth="1100" MinHeight="700"
+        WindowStartupLocation="CenterScreen"
+        Background="{StaticResource AppBackgroundBrush}"
         Title="FLOSS版ストレスチェック実施プログラム 標準版（57項目）">
 	<local:MainView />
 </Window>

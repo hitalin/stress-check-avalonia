@@ -5,12 +5,17 @@
              xmlns:local="clr-namespace:StressCheckAvalonia.ViewModels"
              x:Class="StressCheckAvalonia.Views.AppTitle"
              x:DataType="local:StateViewModel"
-             Height="54"
+             Height="52"
              HorizontalAlignment="Stretch">
-	<Grid>
-		<StackPanel Orientation="Horizontal" Background="#89c548" Margin="0,8,0,0" VerticalAlignment="Top" HorizontalAlignment="Stretch">
-			<TextBlock Text="{Binding AppTitle}" FontSize="30" Margin="90,0,0,0" Foreground="White" />
+	<Border Background="{StaticResource AppPrimaryBrush}" Margin="0,4,0,0">
+		<StackPanel Orientation="Horizontal" VerticalAlignment="Center"
+		            Margin="20,0,0,0" Spacing="12">
+			<Image Source="/Assets/Images/icon.png" Width="28" Height="28" VerticalAlignment="Center"/>
+			<TextBlock Text="{Binding AppTitle}"
+			           FontSize="{StaticResource FontSizeHeader}"
+			           FontWeight="SemiBold"
+			           Foreground="White"
+			           VerticalAlignment="Center"/>
 		</StackPanel>
-		<Image Source="/Assets/Images/icon.png" Width="64" Height="64" Margin="20,0,0,0" HorizontalAlignment="Left"/>
-	</Grid>
+	</Border>
 </UserControl>

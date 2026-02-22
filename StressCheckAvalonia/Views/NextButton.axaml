@@ -7,6 +7,11 @@
              x:DataType="local:StateViewModel">
 
 	<StackPanel Orientation="Horizontal">
-		<Button Content="{Binding NextButtonText}" Click="ClickHandler" Width="180" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="18"/>
+		<Button Content="{Binding NextButtonText}"
+		        Click="ClickHandler"
+		        Classes="primary"
+		        MinWidth="160"
+		        HorizontalContentAlignment="Center"
+		        VerticalContentAlignment="Center"/>
 	</StackPanel>
 </UserControl>

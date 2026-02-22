@@ -4,8 +4,16 @@
              x:Class="StressCheckAvalonia.Views.SectionDescription"
              x:DataType="local:StateViewModel">
 
-	<TextBlock x:Name="DescriptionTextBlock"
-               Text="{Binding DescriptionText}"
-               FontSize="18"
-               Margin="30,0,0,0"/>
+	<Border BorderThickness="3,0,0,0"
+	        BorderBrush="{StaticResource AppPrimaryBrush}"
+	        Background="{StaticResource AppPrimaryLightBrush}"
+	        Margin="24,8,24,4"
+	        Padding="12,8"
+	        CornerRadius="0,6,6,0">
+		<TextBlock x:Name="DescriptionTextBlock"
+		           Text="{Binding DescriptionText}"
+		           FontSize="{StaticResource FontSizeBody}"
+		           Foreground="{StaticResource AppTextSecondaryBrush}"
+		           TextWrapping="Wrap"/>
+	</Border>
 </UserControl>

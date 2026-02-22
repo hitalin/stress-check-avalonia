@@ -6,22 +6,104 @@
 		<FontFamily x:Key="MeiryoUI">
 			avares://StressCheckAvalonia/Assets/Fonts/MeiryoUI.ttf#Meiryo UI
 		</FontFamily>
+
+		<!-- Color Tokens -->
+		<SolidColorBrush x:Key="AppPrimaryBrush" Color="#7CB342" />
+		<SolidColorBrush x:Key="AppPrimaryHoverBrush" Color="#558B2F" />
+		<SolidColorBrush x:Key="AppPrimaryLightBrush" Color="#F1F8E9" />
+		<SolidColorBrush x:Key="AppBackgroundBrush" Color="#F6FAF1" />
+		<SolidColorBrush x:Key="AppHeaderBackgroundBrush" Color="#EBF5E0" />
+		<SolidColorBrush x:Key="AppTextPrimaryBrush" Color="#1A1A1A" />
+		<SolidColorBrush x:Key="AppTextSecondaryBrush" Color="#4A6A30" />
+		<SolidColorBrush x:Key="AppTextTertiaryBrush" Color="#7A9A60" />
+		<SolidColorBrush x:Key="AppDividerBrush" Color="#C8E6A0" />
+		<SolidColorBrush x:Key="AppRequiredMarkBrush" Color="#D32F2F" />
+
+		<!-- Font Size Tokens -->
+		<x:Double x:Key="FontSizeCaption">11</x:Double>
+		<x:Double x:Key="FontSizeBody">13</x:Double>
+		<x:Double x:Key="FontSizeSubtitle">15</x:Double>
+		<x:Double x:Key="FontSizeTitle">18</x:Double>
+		<x:Double x:Key="FontSizeHeader">20</x:Double>
 	</Application.Resources>
 	<Application.Styles>
 		<FluentTheme>
 			<FluentTheme.Palettes>
-				<ColorPaletteResources x:Key="Light" Accent="#ff34854d" AltHigh="White" AltLow="White" AltMedium="White" AltMediumHigh="White" AltMediumLow="White" BaseHigh="Black" BaseLow="#ffc2db65" BaseMedium="#ff7d9728" BaseMediumHigh="#ff4f6a00" BaseMediumLow="#ff668114" ChromeAltLow="#ff4f6a00" ChromeBlackHigh="Black" ChromeBlackLow="#ffc2db65" ChromeBlackMedium="#ff4f6a00" ChromeBlackMediumLow="#ff7d9728" ChromeDisabledHigh="#ffc2db65" ChromeDisabledLow="#ff7d9728" ChromeGray="#ff668114" ChromeHigh="#ffc2db65" ChromeLow="#ffe6f3bb" ChromeMedium="#ffdfeeaa" ChromeMediumLow="#ffe6f3bb" ChromeWhite="White" ListLow="#ffdfeeaa" ListMedium="#ffc2db65" RegionColor="#fff7ffff" />
-				<ColorPaletteResources x:Key="Dark" Accent="#ff34854d" AltHigh="Black" AltLow="Black" AltMedium="Black" AltMediumHigh="Black" AltMediumLow="Black" BaseHigh="White" BaseLow="#ff784834" BaseMedium="#ffc5a294" BaseMediumHigh="#ffd8b8ac" BaseMediumLow="#ff9e7564" ChromeAltLow="#ffd8b8ac" ChromeBlackHigh="Black" ChromeBlackLow="#ffd8b8ac" ChromeBlackMedium="Black" ChromeBlackMediumLow="Black" ChromeDisabledHigh="#ff784834" ChromeDisabledLow="#ffc5a294" ChromeGray="#ffb28b7c" ChromeHigh="#ffb28b7c" ChromeLow="#ff46150a" ChromeMedium="#ff532215" ChromeMediumLow="#ff6c3b2a" ChromeWhite="White" ListLow="#ff532215" ListMedium="#ff784834" RegionColor="#ff353819" />
+				<ColorPaletteResources x:Key="Light" Accent="#ff7cb342" AltHigh="White" AltLow="White" AltMedium="White" AltMediumHigh="White" AltMediumLow="White" BaseHigh="#ff1a1a1a" BaseLow="#ffcfddbe" BaseMedium="#ff8ba070" BaseMediumHigh="#ff6a7e52" BaseMediumLow="#ff7a9060" ChromeAltLow="#ff6a7e52" ChromeBlackHigh="Black" ChromeBlackLow="#ffcfddbe" ChromeBlackMedium="#ff6a7e52" ChromeBlackMediumLow="#ff8ba070" ChromeDisabledHigh="#ffcfddbe" ChromeDisabledLow="#ff8ba070" ChromeGray="#ff7a9060" ChromeHigh="#ffcfddbe" ChromeLow="#fff0f7e6" ChromeMedium="#ffe5f1d5" ChromeMediumLow="#fff0f7e6" ChromeWhite="White" ListLow="#ffe5f1d5" ListMedium="#ffcfddbe" RegionColor="#fff6faf1" />
 			</FluentTheme.Palettes>
 		</FluentTheme>
+
+		<!-- Global Font -->
 		<Style Selector="TextBlock">
 			<Setter Property="FontFamily" Value="{StaticResource MeiryoUI}"/>
+			<Setter Property="Foreground" Value="{StaticResource AppTextPrimaryBrush}"/>
 		</Style>
 		<Style Selector="Button">
 			<Setter Property="FontFamily" Value="{StaticResource MeiryoUI}"/>
 		</Style>
 		<Style Selector="RadioButton">
 			<Setter Property="FontFamily" Value="{StaticResource MeiryoUI}"/>
+			<Setter Property="Padding" Value="8,6"/>
+			<Setter Property="MinHeight" Value="32"/>
+		</Style>
+		<Style Selector="TextBox">
+			<Setter Property="FontFamily" Value="{StaticResource MeiryoUI}"/>
+			<Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+			<Setter Property="CornerRadius" Value="6"/>
+			<Setter Property="Padding" Value="12,10"/>
+		</Style>
+		<Style Selector="ComboBox">
+			<Setter Property="FontFamily" Value="{StaticResource MeiryoUI}"/>
+			<Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+			<Setter Property="CornerRadius" Value="6"/>
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+			<Setter Property="MinHeight" Value="38"/>
+		</Style>
+		<Style Selector="DatePicker">
+			<Setter Property="FontFamily" Value="{StaticResource MeiryoUI}"/>
+			<Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+			<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		</Style>
+
+		<!-- Primary Button -->
+		<Style Selector="Button.primary">
+			<Setter Property="Background" Value="{StaticResource AppPrimaryBrush}"/>
+			<Setter Property="Foreground" Value="White"/>
+			<Setter Property="FontWeight" Value="SemiBold"/>
+			<Setter Property="CornerRadius" Value="8"/>
+			<Setter Property="Padding" Value="28,12"/>
+			<Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+		</Style>
+		<Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+			<Setter Property="Background" Value="{StaticResource AppPrimaryHoverBrush}"/>
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
+
+		<!-- Secondary Button -->
+		<Style Selector="Button.secondary">
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="BorderBrush" Value="{StaticResource AppPrimaryBrush}"/>
+			<Setter Property="Foreground" Value="{StaticResource AppPrimaryBrush}"/>
+			<Setter Property="BorderThickness" Value="1.5"/>
+			<Setter Property="CornerRadius" Value="8"/>
+			<Setter Property="Padding" Value="24,11"/>
+			<Setter Property="FontSize" Value="{StaticResource FontSizeBody}"/>
+			<Setter Property="FontWeight" Value="Medium"/>
+		</Style>
+		<Style Selector="Button.secondary:pointerover /template/ ContentPresenter">
+			<Setter Property="Background" Value="{StaticResource AppPrimaryLightBrush}"/>
+		</Style>
+
+		<!-- Question Row Hover -->
+		<Style Selector="Border.questionRow">
+			<Setter Property="Transitions">
+				<Transitions>
+					<BrushTransition Property="Background" Duration="0:0:0.12"/>
+				</Transitions>
+			</Setter>
+		</Style>
+		<Style Selector="Border.questionRow:pointerover">
+			<Setter Property="Background" Value="{StaticResource AppPrimaryLightBrush}"/>
 		</Style>
 	</Application.Styles>
 </Application>

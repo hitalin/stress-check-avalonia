@@ -7,21 +7,20 @@
              x:DataType="local:QuestionViewModel">
 
 	<StackPanel Orientation="Horizontal"
-                Margin="30,6,0,0"
+                Margin="24,6,0,0"
                 VerticalAlignment="Top"
                 HorizontalAlignment="Left"
 				Background="{Binding Background}" >
 		<TextBlock x:Name="QuestionIdTextBlock"
-                   FontSize="18"
-                   Foreground="Black"
+                   FontSize="{StaticResource FontSizeBody}"
+                   Foreground="{StaticResource AppTextSecondaryBrush}"
                    Text="{Binding Question.Id}" />
 		<TextBlock Text="."
-                   FontSize="18"
-                   Foreground="Black" />
+                   FontSize="{StaticResource FontSizeBody}"
+                   Foreground="{StaticResource AppTextSecondaryBrush}" />
 		<TextBlock x:Name="QuestionTextTextBlock"
-                   FontSize="18"
+                   FontSize="{StaticResource FontSizeBody}"
                    Margin="6,0,0,0"
-                   Foreground="Black"
                    Text="{Binding Question.Text}" />
 	</StackPanel>
 </UserControl>

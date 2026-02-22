@@ -1,27 +1,32 @@
-﻿using System;
-using System.Linq;
+using System.Collections.Frozen;
 using ReactiveUI;
 using StressCheckAvalonia.Models;
-using StressCheckAvalonia.Services;
-using StressCheckAvalonia.Views;
+using StressCheckAvalonia.Models.States;
 
 namespace StressCheckAvalonia.ViewModels;
 
 public class StateViewModel : ReactiveObject
 {
-    public MainView? MainView { get; set; }
-
-    private static StateViewModel? _instance;
-    private State _currentState;
-
-    public static StateViewModel Instance
+    private static readonly FrozenDictionary<State, IAppState> States = new Dictionary<State, IAppState>
     {
-        get
-        {
-            _instance ??= new StateViewModel();
-            return _instance;
-        }
+        [State.Input] = InputState.Instance,
+        [State.SectionActive] = SectionActiveState.Instance,
+        [State.Aggregated] = AggregatedState.Instance,
+    }.ToFrozenDictionary();
+
+    private readonly SectionViewModel _sectionViewModel;
+    private readonly EmployeeViewModel _employeeViewModel;
+    private State _currentState;
+    private IAppState _appState = InputState.Instance;
+
+    public StateViewModel(SectionViewModel sectionViewModel, EmployeeViewModel employeeViewModel)
+    {
+        _sectionViewModel = sectionViewModel;
+        _employeeViewModel = employeeViewModel;
     }
+
+    public SectionViewModel SectionViewModel => _sectionViewModel;
+    public EmployeeViewModel EmployeeViewModel => _employeeViewModel;
 
     public State CurrentState
     {
@@ -29,6 +34,7 @@ public class StateViewModel : ReactiveObject
         set
         {
             this.RaiseAndSetIfChanged(ref _currentState, value);
+            _appState = States[value];
             this.RaisePropertyChanged(nameof(IsInput));
             this.RaisePropertyChanged(nameof(IsSectionActive));
             this.RaisePropertyChanged(nameof(IsAggregated));
@@ -39,189 +45,24 @@ public class StateViewModel : ReactiveObject
         }
     }
 
-    public bool IsInput
-    {
-        get => CurrentState == State.Input;
-    }
+    public bool IsInput => CurrentState == State.Input;
     public bool IsInputInverted => !IsInput;
+    public bool IsSectionActive => CurrentState == State.SectionActive;
+    public bool IsAggregated => CurrentState == State.Aggregated;
 
-    public bool IsSectionActive
-    {
-        get => CurrentState == State.SectionActive;
-    }
+    public string AppTitle => _appState.GetAppTitle(this);
+    public string DescriptionText => _appState.GetDescriptionText(this);
+    public string NextButtonText => _appState.NextButtonText;
 
-    public bool IsAggregated
-    {
-        get => CurrentState == State.Aggregated;
-    }
+    public void HandleNext() => _appState.HandleNext(this);
+    public void HandleBack() => _appState.HandleBack(this);
 
-    public Section CurrentSection
+    public void Initialize()
     {
-        get => SectionViewModel.Instance.CurrentSection ?? new Section(null, null, null);
-        set
-        {
-            SectionViewModel.Instance.CurrentSection = value;
-            this.RaisePropertyChanged(nameof(AppTitle));
-        }
-    }
-
-    public string AppTitle
-    {
-        get
-        {
-            return CurrentState switch
-            {
-                State.Input => "ストレスチェック開始",
-                State.SectionActive => CurrentSection != null ? $"STEP {CurrentSection.Step} {CurrentSection.Name}" : "",
-                State.Aggregated => "ストレスチェック終了",
-                _ => throw new InvalidOperationException("Undefined state for AppTitle"),
-            };
-        }
-    }
-
-    public string DescriptionText
-    {
-        get
-        {
-            return CurrentState switch
-            {
-                State.Input => "必須事項を入力してください。",
-                State.SectionActive => CurrentSection != null ? CurrentSection.Description : "",
-                State.Aggregated => "これで質問は、終わりです。お疲れさまでした。",
-                _ => throw new InvalidOperationException("Undefined state for DescriptionText"),
-            };
-        }
-    }
-
-    public string NextButtonText
-    {
-        get
-        {
-            return CurrentState switch
-            {
-                State.Input => "入力を完了して開始",
-                State.SectionActive => "1つ後の画面へ進む",
-                State.Aggregated => "結果を保存して終了",
-                _ => throw new InvalidOperationException("Undefined state for NextButtonText"),
-            };
-        }
-    }
-    public void HandleInputState(bool shouldValidateInput = false)
-    {
-        if (EmployeeViewModel.Instance.IsInformationComplete())
+        if (_employeeViewModel.IsInformationComplete())
         {
             CurrentState = State.SectionActive;
-            MainView?.DisplayQuestions(0, SectionViewModel.Instance.QuestionsPerPage);
-        }
-        else if (shouldValidateInput)
-        {
-            // Highlight the incomplete fields
-            EmployeeViewModel.Instance.ValidateInput();
-        }
-    }
-
-    public void HandleSectionActiveState(bool isNext)
-    {
-        var sectionViewModel = SectionViewModel.Instance;
-        // Ensure the CurrentSection is not null before attempting to access it
-        if (sectionViewModel.CurrentSection == null) return;
-
-        int currentIndex = LoadSections.Sections.IndexOf(sectionViewModel.CurrentSection);
-
-        if (isNext)
-        {
-            if (sectionViewModel.AreAllDisplayedQuestionsAnswered())
-            {
-                sectionViewModel.UpdateScores();
-                sectionViewModel.UpdateValues();
-
-                if (currentIndex >= 0 && currentIndex < LoadSections.Sections.Count - 1 && sectionViewModel.AreAllQuestionsDisplayed())
-                {
-                    currentIndex++;
-                    sectionViewModel.QuestionStartIndex = 0;
-                    MainView?.DisplayQuestions(currentIndex, sectionViewModel.QuestionsPerPage);
-                    CurrentState = State.SectionActive;
-                }
-                else if (!sectionViewModel.AreAllQuestionsDisplayed())
-                {
-                    sectionViewModel.QuestionStartIndex += sectionViewModel.QuestionsPerPage;
-                    MainView?.DisplayQuestions(currentIndex, sectionViewModel.QuestionsPerPage);
-                }
-                else
-                {
-                    HandleAggregatedState();
-                }
-            }
-            else
-            {
-                foreach (var questionViewModel in sectionViewModel.DisplayedQuestionViewModels)
-                {
-                    questionViewModel.ValidateAnswered();
-                }
-            }
-        }
-        else
-        {
-            if (sectionViewModel.QuestionStartIndex == 0)
-            {
-                if (currentIndex > 0)
-                {
-                    sectionViewModel.UpdateScores();
-                    sectionViewModel.UpdateValues();
-
-                    currentIndex--;
-
-                    var previousSection = LoadSections.Sections.ElementAtOrDefault(currentIndex);
-                    if (previousSection?.Questions != null)
-                    {
-                        var previousSectionQuestionCount = previousSection.Questions.Count;
-                        sectionViewModel.QuestionStartIndex = (previousSectionQuestionCount - 1) / sectionViewModel.QuestionsPerPage * sectionViewModel.QuestionsPerPage;
-                    }
-
-                    MainView?.DisplayQuestions(currentIndex, sectionViewModel.QuestionsPerPage);
-                    CurrentState = State.SectionActive;
-                }
-                else
-                {
-                    CurrentState = State.Input;
-                }
-            }
-            else
-            {
-                sectionViewModel.QuestionStartIndex -= sectionViewModel.QuestionsPerPage;
-
-                var currentSection = LoadSections.Sections.ElementAtOrDefault(currentIndex);
-                if (currentSection?.Questions != null)
-                {
-                    MainView?.DisplayQuestions(currentIndex, sectionViewModel.QuestionsPerPage);
-                }
-            }
-        }
-    }
-
-    public void HandleAggregatedState(bool isBackAction = false)
-    {
-        if (!isBackAction && SectionViewModel.Instance.AreAllQuestionsDisplayed())
-        {
-            CurrentState = State.Aggregated;
-        }
-        else
-        {
-            int lastSectionIndex = LoadSections.Sections.Count - 1;
-            if (lastSectionIndex >= 0)
-            {
-                var lastSection = LoadSections.Sections[lastSectionIndex];
-                if (lastSection?.Questions != null)
-                {
-                    MainView?.DisplayQuestions(lastSectionIndex, SectionViewModel.Instance.QuestionsPerPage);
-                    // Ensure lastSection.Questions is not null before accessing its properties
-                    if (lastSection.Questions != null)
-                    {
-                        SectionViewModel.Instance.QuestionStartIndex = (lastSection.Questions.Count - 1) / SectionViewModel.Instance.QuestionsPerPage * SectionViewModel.Instance.QuestionsPerPage;
-                    }
-                }
-            }
-            CurrentState = State.SectionActive;
+            _sectionViewModel.UpdateDisplayedQuestions(0);
         }
     }
 }

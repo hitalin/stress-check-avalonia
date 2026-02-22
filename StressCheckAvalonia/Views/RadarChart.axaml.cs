@@ -1,20 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
+using StressCheckAvalonia.Models;
 
 namespace StressCheckAvalonia.Views;
-
-public class RadarChartData
-{
-    public string? Label { get; set; }
-    public double Value { get; set; }
-    public Color Color { get; set; }
-}
 
 public partial class RadarChart : UserControl
 {
@@ -30,6 +21,7 @@ public partial class RadarChart : UserControl
     public RadarChart()
     {
         this.GetObservable(BoundsProperty).Subscribe(_ => InvalidateVisual());
+        this.GetObservable(ItemsProperty).Subscribe(_ => InvalidateVisual());
     }
 
     public override void Render(DrawingContext context)

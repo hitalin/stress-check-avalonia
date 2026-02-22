@@ -1,30 +1,26 @@
-using System;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using StressCheckAvalonia.Models;
+using StressCheckAvalonia.Services;
 using StressCheckAvalonia.ViewModels;
 
 namespace StressCheckAvalonia.Views;
 
 public partial class NextButton : UserControl
 {
+    private readonly StateViewModel _stateViewModel;
+
     public NextButton()
     {
         InitializeComponent();
-        DataContext = StateViewModel.Instance;
+        _stateViewModel = ServiceLocator.GetRequired<StateViewModel>();
+        DataContext = _stateViewModel;
     }
 
     public void ClickHandler(object sender, RoutedEventArgs args)
     {
         if (sender is Button)
         {
-            (StateViewModel.Instance.CurrentState switch
-            {
-                State.Input => new Action(() => StateViewModel.Instance.HandleInputState(true)),
-                State.SectionActive => new Action(() => StateViewModel.Instance.HandleSectionActiveState(true)),
-                State.Aggregated => new Action(() => Environment.Exit(0)),
-                _ => throw new InvalidOperationException("Undefined state for NextButton ClickHandler"),
-            })();
+            _stateViewModel.HandleNext();
         }
     }
 }

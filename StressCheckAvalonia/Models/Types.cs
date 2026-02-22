@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Avalonia.Media;
 
 namespace StressCheckAvalonia.Models;
 
@@ -12,10 +13,27 @@ public enum State
     Aggregated
 }
 
+public enum FactorType
+{
+    Subtraction,
+    Addition,
+    Complex
+}
+
+public enum StressLevel
+{
+    High,
+    Low
+}
+
+public record LevelResult(bool Method1, bool Method2, IReadOnlyList<int> Totals);
+
+public record RadarChartData(string? Label, double Value, Color Color);
+
 public class Employee
 {
     public string Gender { get; set; } = string.Empty;
-    public string Level { get; set; } = string.Empty;
+    public StressLevel Level { get; set; }
     public string Name { get; set; } = string.Empty;
     public string Furigana { get; set; } = string.Empty;
     public DateTimeOffset Birthday { get; set; }
@@ -54,7 +72,7 @@ public class Factor(IEnumerable<Rate>? rates, IEnumerable<int>? items)
     public int Point { get; set; }
     public string Scale { get; set; } = string.Empty;
     public int Value { get; set; }
-    public string Type { get; set; } = string.Empty;
+    public FactorType Type { get; set; }
     public ReadOnlyCollection<Rate>? Rates { get; } = rates?.ToList().AsReadOnly();
     public ReadOnlyCollection<int>? Items { get; } = items?.ToList().AsReadOnly();
 }

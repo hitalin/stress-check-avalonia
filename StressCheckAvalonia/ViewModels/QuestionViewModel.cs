@@ -50,7 +50,7 @@ public class QuestionViewModel(Question question, SectionViewModel sectionViewMo
     {
         if (!IsAnswered)
         {
-            Background = new SolidColorBrush(Color.FromArgb(128, 255, 0, 0));
+            Background = new SolidColorBrush(EmployeeViewModel.HighStressColor);
         }
     }
 }

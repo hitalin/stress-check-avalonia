@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using StressCheckAvalonia.Models;
 
 namespace StressCheckAvalonia.Services;
@@ -38,9 +35,9 @@ public static class ValueCalculator
 
         score = factor.Type switch
         {
-            "subtraction" => CalculateSubtractionPattern(filteredQuestions),
-            "addition" => CalculateAdditionPattern(filteredQuestions),
-            "complex" => CalculateComplexPattern(filteredQuestions),
+            FactorType.Subtraction => CalculateSubtractionPattern(filteredQuestions),
+            FactorType.Addition => CalculateAdditionPattern(filteredQuestions),
+            FactorType.Complex => CalculateComplexPattern(filteredQuestions),
             _ => 0
         };
 

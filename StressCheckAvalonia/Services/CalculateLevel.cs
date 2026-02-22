@@ -1,14 +1,6 @@
-using System;
-using System.Collections.Generic;
+using StressCheckAvalonia.Models;
 
 namespace StressCheckAvalonia.Services;
-
-public class LevelResult(bool method1, bool method2, IReadOnlyList<int> totals)
-{
-    public bool Method1 { get; set; } = method1;
-    public bool Method2 { get; set; } = method2;
-    public IReadOnlyList<int> Totals { get; } = totals;
-}
 
 public static class LevelCalculator
 {

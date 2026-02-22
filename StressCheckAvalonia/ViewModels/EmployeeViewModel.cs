@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using Avalonia.Media;
+﻿using Avalonia.Media;
 using ReactiveUI;
 using StressCheckAvalonia.Models;
 
@@ -8,22 +6,9 @@ namespace StressCheckAvalonia.ViewModels;
 
 public class EmployeeViewModel : ReactiveObject
 {
-    private static EmployeeViewModel? _instance;
-    public static EmployeeViewModel Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = new EmployeeViewModel();
-            }
-            return _instance;
-        }
-    }
-    private EmployeeViewModel()
+    public EmployeeViewModel()
     {
         _employee = new Employee { Birthday = new DateTime(2000, 1, 1) };
-        _level = string.Empty;
         _levelText = string.Empty;
         _levelColor = Brushes.Transparent;
     }
@@ -60,17 +45,20 @@ public class EmployeeViewModel : ReactiveObject
         private set => this.RaiseAndSetIfChanged(ref _genderBackground, value);
     }
 
-    private string _level;
-    public string Level
+    private StressLevel _level;
+    public StressLevel Level
     {
         get => _level;
         set
         {
             this.RaiseAndSetIfChanged(ref _level, value);
-            LevelText = _level == "High" ? "高ストレス者です" : "低ストレス者です";
-            LevelColor = _level == "High" ? new SolidColorBrush(Color.FromArgb(128, 255, 0, 0)) : new SolidColorBrush(Color.FromArgb(128, 0, 0, 255));
+            LevelText = _level == StressLevel.High ? "高ストレス者です" : "低ストレス者です";
+            LevelColor = _level == StressLevel.High ? new SolidColorBrush(HighStressColor) : new SolidColorBrush(LowStressColor);
         }
     }
+
+    public static readonly Color HighStressColor = Color.FromArgb(128, 255, 0, 0);
+    public static readonly Color LowStressColor = Color.FromArgb(128, 0, 0, 255);
 
     private string _levelText;
     public string LevelText
@@ -268,7 +256,7 @@ public class EmployeeViewModel : ReactiveObject
 
     public void ValidateInput()
     {
-        var errorBrush = new SolidColorBrush(Color.FromArgb(128, 255, 0, 0));
+        var errorBrush = new SolidColorBrush(HighStressColor);
         if (string.IsNullOrWhiteSpace(Name))
             NameBackground = errorBrush;
         if (string.IsNullOrWhiteSpace(Furigana))

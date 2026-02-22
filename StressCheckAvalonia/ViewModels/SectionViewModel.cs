@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using ReactiveUI;
 using StressCheckAvalonia.Models;
 using StressCheckAvalonia.Services;
@@ -9,36 +7,21 @@ namespace StressCheckAvalonia.ViewModels;
 
 public class SectionViewModel : ReactiveObject
 {
-    private static SectionViewModel? _instance;
-
     private Section? _currentSection;
-    private int _questionIndex;
-    private ReadOnlyCollection<QuestionViewModel> _questionViewModels;
-    private ReadOnlyCollection<QuestionViewModel> _displayedQuestionViewModels;
+    private ReadOnlyCollection<QuestionViewModel> _questionViewModels = new([]);
+    private readonly ObservableCollection<QuestionViewModel> _displayedQuestionViewModels = [];
 
     public SectionViewModel()
     {
         CurrentSection = LoadSections.Sections[0];
-        _questionViewModels = new ReadOnlyCollection<QuestionViewModel>(CurrentSection?.Questions?.Select(q => new QuestionViewModel(q, this)).ToList() ?? []);
-        _displayedQuestionViewModels = new ReadOnlyCollection<QuestionViewModel>([]);
-    }
-
-    public static SectionViewModel Instance
-    {
-        get
-        {
-            _instance ??= new SectionViewModel();
-            return _instance;
-        }
+        _questionViewModels = new ReadOnlyCollection<QuestionViewModel>(
+            CurrentSection?.Questions?.Select(q => new QuestionViewModel(q, this)).ToList() ?? []);
     }
 
     public Section? CurrentSection
     {
-        get { return _currentSection; }
-        set
-        {
-            this.RaiseAndSetIfChanged(ref _currentSection, value);
-        }
+        get => _currentSection;
+        set => this.RaiseAndSetIfChanged(ref _currentSection, value);
     }
 
     public void SetCurrentSection(int newSectionIndex)
@@ -46,19 +29,8 @@ public class SectionViewModel : ReactiveObject
         if (newSectionIndex >= 0 && newSectionIndex < LoadSections.Sections.Count)
         {
             CurrentSection = LoadSections.Sections[newSectionIndex];
-            _questionViewModels = new ReadOnlyCollection<QuestionViewModel>(CurrentSection?.Questions?.Select(q => new QuestionViewModel(q, this)).ToList() ?? []);
-        }
-    }
-
-    public int QuestionIndex
-    {
-        get { return _questionIndex; }
-        set
-        {
-            if (_questionIndex != value)
-            {
-                _questionIndex = value;
-            }
+            _questionViewModels = new ReadOnlyCollection<QuestionViewModel>(
+                CurrentSection?.Questions?.Select(q => new QuestionViewModel(q, this)).ToList() ?? []);
         }
     }
 
@@ -89,35 +61,26 @@ public class SectionViewModel : ReactiveObject
     public int QuestionStartIndex { get; set; }
     public int QuestionsPerPage { get; } = 10;
 
+    public ObservableCollection<QuestionViewModel> DisplayedQuestionViewModels => _displayedQuestionViewModels;
+
     public void UpdateDisplayedQuestions(int sectionIndex)
     {
-        // Set the current section
         SetCurrentSection(sectionIndex);
 
-        // Use a mutable list to manage question view models temporarily
-        var updatedDisplayedQuestions = new List<QuestionViewModel>();
-
-        // Populate the list with the range of questions to be displayed
+        _displayedQuestionViewModels.Clear();
         for (int i = QuestionStartIndex; i < QuestionStartIndex + QuestionsPerPage && i < _questionViewModels.Count; i++)
         {
-            updatedDisplayedQuestions.Add(_questionViewModels[i]);
+            _displayedQuestionViewModels.Add(_questionViewModels[i]);
         }
-
-        // Convert the list to a ReadOnlyCollection to assign back to _displayedQuestionViewModels
-        _displayedQuestionViewModels = new ReadOnlyCollection<QuestionViewModel>(updatedDisplayedQuestions);
     }
 
     public bool AreAllQuestionsDisplayed()
     {
-        var questions = Questions;
-        return QuestionStartIndex + QuestionsPerPage >= questions?.Count;
+        return QuestionStartIndex + QuestionsPerPage >= Questions?.Count;
     }
-
-    public ReadOnlyCollection<QuestionViewModel> DisplayedQuestionViewModels => _displayedQuestionViewModels;
 
     public bool AreAllDisplayedQuestionsAnswered()
     {
-        // Check if all currently displayed questions are answered
         return DisplayedQuestionViewModels.All(q => q.IsAnswered);
     }
 }

@@ -4,8 +4,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:local="clr-namespace:StressCheckAvalonia.Views"
-             xmlns:desc="clr-namespace:StressCheckAvalonia.ViewModels"
-             x:DataType="desc:StateViewModel">
+             xmlns:vm="clr-namespace:StressCheckAvalonia.ViewModels"
+             x:DataType="vm:StateViewModel">
 	<ScrollViewer HorizontalScrollBarVisibility="Auto">
 		<Grid>
 			<Grid.RowDefinitions>
@@ -22,8 +22,29 @@
 			<ContentControl x:Name="EmployeeInformationControl" Grid.Row="3" IsVisible="{Binding IsInput}">
 				<local:EmployeeInformation />
 			</ContentControl>
-			<StackPanel x:Name="QuestionsPanel" Grid.Row="3" IsVisible="{Binding IsSectionActive}">
-			</StackPanel>
+			<ItemsControl Grid.Row="3"
+			              IsVisible="{Binding IsSectionActive}"
+			              ItemsSource="{Binding SectionViewModel.DisplayedQuestionViewModels}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate x:DataType="vm:QuestionViewModel">
+						<StackPanel>
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="Auto"/>
+								</Grid.ColumnDefinitions>
+								<local:QuestionText Grid.Column="0"/>
+								<local:ChoiceButtons Grid.Column="1"
+								                     HorizontalAlignment="Right"
+								                     Margin="0,0,30,0"/>
+							</Grid>
+							<Border BorderThickness="0,0,0,1"
+							        BorderBrush="Gray"
+							        Margin="30,0,30,10"/>
+						</StackPanel>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
 			<local:AggregateResults Grid.Row="3" />
 			<DockPanel Grid.Row="5" LastChildFill="False">
 				<local:BackButtons DockPanel.Dock="Left" Margin="30, 0, 0, 10" />

@@ -2,18 +2,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:StressCheckAvalonia.ViewModels"
+             xmlns:vm="clr-namespace:StressCheckAvalonia.ViewModels"
+             xmlns:local="clr-namespace:StressCheckAvalonia.Views"
              x:Class="StressCheckAvalonia.Views.AggregateResults"
-             x:DataType="local:EmployeeViewModel">
+             x:DataType="vm:ResultsViewModel">
 
 	<StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 		<TextBlock FontSize="30"
-			   Text="{Binding LevelText}"
-			   Foreground="{Binding LevelColor}"
+			   Text="{Binding Employee.LevelText}"
+			   Foreground="{Binding Employee.LevelColor}"
 			   HorizontalAlignment="Center" />
-		<StackPanel x:Name="SectionPanel"
-                HorizontalAlignment="Stretch">
-		</StackPanel>
+		<ItemsControl ItemsSource="{Binding SectionResults}">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Horizontal" />
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+			<ItemsControl.ItemTemplate>
+				<DataTemplate x:DataType="vm:SectionResultItem">
+					<StackPanel HorizontalAlignment="Center">
+						<TextBlock Text="{Binding Title}"
+						           HorizontalAlignment="Center" />
+						<TextBlock Text="{Binding ScoresText}"
+						           HorizontalAlignment="Center" />
+						<TextBlock Text="{Binding ValuesText}"
+						           HorizontalAlignment="Center" />
+						<TextBlock Text="{Binding Group}"
+						           HorizontalAlignment="Center" />
+						<local:RadarChart Items="{Binding RadarChartItems}"
+						                  Width="300" Height="300"
+						                  Margin="20" />
+					</StackPanel>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
 	</StackPanel>
 
 </UserControl>

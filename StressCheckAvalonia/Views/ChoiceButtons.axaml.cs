@@ -10,6 +10,19 @@ public partial class ChoiceButtons : UserControl
     public ChoiceButtons()
     {
         InitializeComponent();
+        DataContextChanged += OnDataContextChanged;
+    }
+
+    private void OnDataContextChanged(object? sender, EventArgs e)
+    {
+        if (DataContext is QuestionViewModel vm && vm.Question.Score >= 1 && vm.Question.Score <= 4)
+        {
+            var radioButton = this.FindControl<RadioButton>($"RadioButton{vm.Question.Score}");
+            if (radioButton != null)
+            {
+                radioButton.IsChecked = true;
+            }
+        }
     }
 
     private void InitializeComponent()
